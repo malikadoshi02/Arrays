@@ -1,12 +1,66 @@
 
 package com.company;
 
-/**
- * An exception in case the line limit has been reached
- */
+public class Student implements Cloneable {
+    private String name;
+    private double money;
 
-public class DeanException extends Throwable {
-    public DeanException(){
-        super();
+    public Student(String name, double money) {
+        this.name = name;
+        this.money = money;
+    }
+
+    /**
+     * Returns the name of the Student as a String
+     *
+     * @return the name of the Student as a String
+     */
+    public String getName() {
+        return this.name;
+    }
+
+    /**
+     * Sets the name of the student to the new name provided in the arguemnt
+     *
+     * @param name
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    /**
+     * Returns the amount of money the student has as a double
+     *
+     * @return the amount of money the student has as a double
+     */
+    public double getMoney() {
+        return money;
+    }
+
+    /**
+     * Sets the amount of money the student has provided in the arguement
+     *
+     * @param money
+     */
+    public void setMoney(double money) {
+        this.money = money;
+    }
+
+    public boolean equals(Object obj) {
+        Student student;
+        if (obj != null && obj instanceof Student) {
+            student = (Student) obj;
+            return this.name.equals(student.name) && this.money == student.money;
+        }
+        return false;
+    }
+
+    public Student clone() throws CloneNotSupportedException {
+        Student studentClone = new Student(this.name, this.money);
+        return studentClone;
+    }
+
+    public String toString() {
+        return "Student: " + getName() + "Account Balance: " + getMoney();
     }
 }
