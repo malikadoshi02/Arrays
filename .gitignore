@@ -1,66 +1,144 @@
 
 package com.company;
+public class StudentLine {
+    private Student[] students;
+    private int studentCount;
+    final int CAPACITY = 20;
 
-public class Student implements Cloneable {
-    private String name;
-    private double money;
+    /**
+     * Constructs a empty student line
+     */
 
-    public Student(String name, double money) {
-        this.name = name;
-        this.money = money;
+    public StudentLine() {
+        studentCount = 0;
+        students = new Student[CAPACITY];
     }
 
     /**
-     * Returns the name of the Student as a String
-     *
-     * @return the name of the Student as a String
+     * stores the number of students in the list
+     * @return
      */
-    public String getName() {
-        return this.name;
+
+    public int numStudents(){
+        return studentCount;
     }
 
     /**
-     * Sets the name of the student to the new name provided in the arguemnt
-     *
-     * @param name
+     * Checks if the list has exceeded capacity of 20. If capacity has been exceeded, an exception will be thrown
+     * @param index
+     * @return
      */
-    public void setName(String name) {
-        this.name = name;
-    }
 
-    /**
-     * Returns the amount of money the student has as a double
-     *
-     * @return the amount of money the student has as a double
-     */
-    public double getMoney() {
-        return money;
-    }
-
-    /**
-     * Sets the amount of money the student has provided in the arguement
-     *
-     * @param money
-     */
-    public void setMoney(double money) {
-        this.money = money;
-    }
-
-    public boolean equals(Object obj) {
-        Student student;
-        if (obj != null && obj instanceof Student) {
-            student = (Student) obj;
-            return this.name.equals(student.name) && this.money == student.money;
+    public Student getStudent(int index) {
+        if(index<0 || index>CAPACITY) {
+            throw new ArrayIndexOutOfBoundsException();
         }
-        return false;
+        return students[index];
     }
 
-    public Student clone() throws CloneNotSupportedException {
-        Student studentClone = new Student(this.name, this.money);
+    /**
+     * Removes a student from a position. If the position is not valid, an exception will be thrown
+     * @param index
+     * @return
+     * @throws EmptyLineException
+     */
+
+    public Student removeStudent(int index) throws EmptyLineException {
+        -- index;
+        if(index<0 || index>=studentCount) {
+            throw new ArrayIndexOutOfBoundsException();
+        }
+        if(students[index] == null){
+            throw new EmptyLineException();
+        }
+        for(int i = index; i < studentCount; i++){
+            students[i] = students[i+1];
+        }
+        -- studentCount;
+        return null;
+    }
+
+    /**
+     * Adds a student to the end of the list or adds a student in the middle of the list, shifting the entire line over
+     * @param index
+     * @param student
+     * @throws DeanException
+     */
+
+    public void addStudent(int index, Student student) throws DeanException {
+        if(studentCount>=20){
+            throw new DeanException();
+        }
+        if (index < 0 || index > studentCount) {
+            throw new IllegalArgumentException("index is too high and would create a hole in the array");
+        }
+        for (int i = studentCount - 1; i >= index; i--) {
+            students[i+1] = students[i];
+        }
+
+        students[index] = student;
+        studentCount++;
+    }
+
+    /**
+     * Swaps students from index 1 and students from index 2
+     * @param index1
+     * @param index2
+     */
+
+    public void swapStudents(int index1, int index2){
+        if(index1 > 20 || index2 > 20){
+            throw new ArrayIndexOutOfBoundsException();
+        }
+        else{
+            Student swap = students[index1];
+            students[index1] = students[index2];
+            students[index2] = swap;
+        }
+    }
+
+    /**
+     * Deep copies the list and throws an exception when capacity has been reaches
+     * @return
+     * @throws CloneNotSupportedException
+     */
+    public StudentLine clone() throws CloneNotSupportedException {
+        StudentLine newLine = new StudentLine();
+        int counter = this.studentCount;
+        Student[] listArr = new Student[CAPACITY];
+        for(int i = 0; i <= CAPACITY; i++){
+            Student temp = students[i].clone();
+            listArr[i] = temp;
+        }
+        StudentLine studentClone = new StudentLine();
         return studentClone;
     }
 
+    /**
+     * checks if the two Lines are equal to each other
+     * @param o
+     * @return
+     */
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (!(o instanceof StudentLine))
+            return false;
+        StudentLine that = (StudentLine) o;
+        return studentCount == that.studentCount && CAPACITY == that.CAPACITY;
+    }
+
+    /**
+     * Holds the place of the name as a string
+     * @return
+     */
+
     public String toString() {
-        return "Student: " + getName() + "Account Balance: " + getMoney();
+        String placeHolder = "";
+        for(int i = 0; i < studentCount; i++){
+            placeHolder += (i +1 ) + " " + students[i].toString() + " ";
+        }
+        return placeHolder;
     }
 }
+
