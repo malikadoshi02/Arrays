@@ -1,11 +1,12 @@
 
 package com.company;
-/**
- * Creates an exception in the case that the line has no one on it
- */
-    public class EmptyLineException extends Exception{
-        public EmptyLineException() {
-            super();
-        }
-    }
 
+/**
+ * An exception in case the line limit has been reached
+ */
+
+public class DeanException extends Throwable {
+    public DeanException(){
+        super();
+    }
+}
